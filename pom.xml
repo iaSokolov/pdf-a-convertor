@@ -6,7 +6,7 @@
 
     <groupId>ru.sberbank</groupId>
     <artifactId>pdf-a-convertor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,10 +21,28 @@
             <version>7.2.1</version>
             <type>pom</type>
         </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-pdfa</artifactId>
+            <version>5.5.13.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.6</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>my-project-name</finalName>
+        <finalName>cv</finalName>
 
         <plugins>
             <plugin>
@@ -35,7 +53,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ru.sberbank.Main</mainClass>
+                            <mainClass>ru.sberbank.PdfA1aConverter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

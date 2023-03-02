@@ -1,24 +1,22 @@
-package ru.sberbank;
+package ru.sberbank.decoder;
 
 import com.itextpdf.kernel.pdf.*;
-
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
+public class StreamDecoder {
+    private final PdfDocument document;
 
-        String DEST = args[1];
-        String SRC = args[0];
+    public StreamDecoder(PdfDocument document) {
+        this.document = document;
+    }
 
-        PdfDocument pdfDoc = new PdfDocument(new PdfReader(SRC), new PdfWriter(DEST));
-
-        List<PdfIndirectReference> pdfIndirectReferencesList = pdfDoc.listIndirectReferences();
+    public void decode() throws Exception {
+        List<PdfIndirectReference> pdfIndirectReferencesList = document.listIndirectReferences();
         for (PdfIndirectReference ref : pdfIndirectReferencesList) {
 
-            PdfObject pdfObject = pdfDoc.getPdfObject(ref.getObjNumber());
+            PdfObject pdfObject = document.getPdfObject(ref.getObjNumber());
             if (pdfObject != null && pdfObject.getType() == PdfObject.STREAM) {
 
                 boolean isMetadata = false;
@@ -42,7 +40,5 @@ public class Main {
                 }
             }
         }
-
-        pdfDoc.close();
     }
 }
