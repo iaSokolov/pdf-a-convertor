@@ -25,7 +25,10 @@ public class Converter {
 
     private List<IConvertItem> initConverters() {
         ArrayList<IConvertItem> list = new ArrayList<>();
+
         list.add(new DecoderConvertor());
+        list.add(new OCGConvertor());
+
         return list;
     }
 
