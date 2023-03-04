@@ -11,6 +11,7 @@ import ru.sberbank.params.ConvertParams;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Converter {
     private final ConvertParams params;
@@ -28,27 +29,26 @@ public class Converter {
         return list;
     }
 
-    public ConversionStatus makeDocument() throws Exception {
+    public List<ConversionStatus> makeDocument() {
+        List<ConversionStatus> result;
+
         try {
             PdfReader reader = new PdfReader(this.params.getSourceFilePath());
             PdfWriter writer = new PdfWriter(this.params.getTargetFilePath());
-
             PdfDocument document = new PdfDocument(reader, writer);
 
-            this.converters.forEach(it -> {
-                try {
-                    it.changeDocument(document);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            result = this.converters
+                    .stream()
+                    .map(convertItem -> convertItem.changeDocument(document))
+                    .collect(Collectors.toList());
 
             document.close();
-
-            return ConversionStatus.SuccessStatus();
         } catch (Exception error) {
-            return ConversionStatus.ErrorStatus(error.getMessage());
+            result = new ArrayList<>();
+            result.add(ConversionStatus.ErrorStatus(error.getMessage()));
         }
+
+        return result;
     }
 
     private void checkParam(ConvertParams params) throws RuntimeException {
