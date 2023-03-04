@@ -11,11 +11,8 @@ public class PdfA1aConverter {
     public static void main(String[] args) {
         ConversionStatus conversionStatus = convert(args);
 
-        switch (conversionStatus.getCode()) {
-            case SUCCESS:
-                break;
-            case ERROR:
-                throw new RuntimeException(conversionStatus.getMessage());
+        if (conversionStatus.getCode() == ConversionStatusCode.ERROR) {
+            throw new RuntimeException(conversionStatus.getMessage());
         }
     }
 
