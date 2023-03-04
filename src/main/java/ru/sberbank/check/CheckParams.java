@@ -5,6 +5,7 @@ import ru.sberbank.params.ConvertParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CheckParams {
     private List<CheckResult> result;
@@ -31,6 +32,9 @@ public class CheckParams {
     }
 
     private List<CheckResult> check(ConvertParams params) {
-        return (List<CheckResult>) checks.stream().map(it -> it.getResult());
+        return checks
+                .stream()
+                .map(ICheckItem::getResult)
+                .collect(Collectors.toList());
     }
 }

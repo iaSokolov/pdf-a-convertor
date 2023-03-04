@@ -35,7 +35,13 @@ public class Converter {
 
             PdfDocument document = new PdfDocument(reader, writer);
 
-            this.converters.forEach(it -> it.changeDocument(document));
+            this.converters.forEach(it -> {
+                try {
+                    it.changeDocument(document);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             document.close();
 

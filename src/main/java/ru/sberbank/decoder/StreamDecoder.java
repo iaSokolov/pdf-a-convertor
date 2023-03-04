@@ -6,13 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class StreamDecoder {
-    private final PdfDocument document;
-
-    public StreamDecoder(PdfDocument document) {
-        this.document = document;
-    }
-
-    public void decode() throws Exception {
+    public void decode(PdfDocument document) throws Exception {
         List<PdfIndirectReference> pdfIndirectReferencesList = document.listIndirectReferences();
         for (PdfIndirectReference ref : pdfIndirectReferencesList) {
 
