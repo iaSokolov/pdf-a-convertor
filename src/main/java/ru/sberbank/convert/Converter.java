@@ -1,13 +1,14 @@
 package ru.sberbank.convert;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.pdfa.PdfADocument;
 import ru.sberbank.check.CheckParams;
 import ru.sberbank.check.CheckResult;
 import ru.sberbank.check.CheckResultCode;
 import ru.sberbank.params.ConvertParams;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,15 +37,27 @@ public class Converter {
         List<ConversionStatus> result;
 
         try {
+            FileInputStream colorProfile = new FileInputStream("src/main/resources/color/sRGB_CS_profile.icm");
+
+            PdfADocument pdf = new PdfADocument(new PdfWriter(this.params.getTargetFilePath()),
+                    PdfAConformanceLevel.PDF_A_1A,
+                    new PdfOutputIntent(
+                            "Custom",
+                            "",
+                            "http://www.color.org",
+                            "sRGB IEC61966-2.1",
+                            colorProfile));
+
+            Document document = new Document(pdf);
+
+            //Setting some required parameters ???
+            pdf.setTagged();
+
             PdfReader reader = new PdfReader(this.params.getSourceFilePath());
-            PdfWriter writer = new PdfWriter(this.params.getTargetFilePath());
-            PdfDocument document = new PdfDocument(reader, writer);
+            PdfDocument sourceDocument = new PdfDocument(reader);
+            sourceDocument.copyPagesTo(1, 2, pdf);
 
-            result = this.converters
-                    .stream()
-                    .map(convertItem -> convertItem.changeDocument(document))
-                    .collect(Collectors.toList());
-
+            result = new ArrayList<>();
             document.close();
         } catch (Exception error) {
             result = new ArrayList<>();
