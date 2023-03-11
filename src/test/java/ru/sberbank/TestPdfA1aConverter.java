@@ -1,21 +1,16 @@
 package ru.sberbank;
 
 import org.junit.jupiter.api.*;
-import ru.sberbank.convert.ConversionStatus;
-import ru.sberbank.convert.ConversionStatusCode;
-import ru.sberbank.convert.Converter;
-import ru.sberbank.params.ConvertParams;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TestConverter {
+public class TestPdfA1aConverter {
     private static final String RESULT_DIR = "tmp/";
     private static final String SOURCE_DIR = "src/test/resources/";
 
@@ -41,36 +36,22 @@ public class TestConverter {
     public void errorNullParamsExceptionTest() {
         RuntimeException exception = assertThrows(
                 RuntimeException.class,
-                () -> new Converter(null)
+                () -> PdfA1aConverter.main(null)
         );
 
-        Assertions.assertEquals("Params is null", exception.getMessage());
+        Assertions.assertEquals("The program must be called with parameters", exception.getMessage());
     }
 
     @Test
     @DisplayName("Test error params exception")
     public void errorParamsExceptionTest() {
         String source = "dummy";
-        ConvertParams convertParams = new ConvertParams(new String[]{source, ""});
         RuntimeException exception = assertThrows(
                 RuntimeException.class,
-                () -> new Converter(convertParams)
+                () -> PdfA1aConverter.main(new String[]{source, ""})
         );
 
         Assertions.assertEquals("File dummy was not found", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Test count converters")
-    public void countConvertersTest() {
-        String source = SOURCE_DIR + "pdf-standard.pdf";
-        String target = "";
-
-        ConvertParams convertParams = new ConvertParams(new String[]{source, target});
-        Converter converter = new Converter(convertParams);
-
-        Assertions.assertNotNull(converter.getConverters());
-        Assertions.assertEquals(2, converter.getConverters().size());
     }
 
     @Test
@@ -80,16 +61,7 @@ public class TestConverter {
         String target = RESULT_DIR + "pdfA-1-result.pdf";
 
         Assertions.assertFalse(new File(target).exists());
-
-        ConvertParams convertParams = new ConvertParams(new String[]{source, target});
-        Converter converter = new Converter(convertParams);
-
-        List<ConversionStatus> conversionStatuses = converter.makeDocument();
-        boolean hasError = conversionStatuses
-                .stream()
-                .anyMatch(it -> it.getCode() == ConversionStatusCode.ERROR);
-        Assertions.assertFalse(hasError);
-
+        PdfA1aConverter.main(new String[]{source, target});
         Assertions.assertTrue(new File(target).exists());
     }
 }

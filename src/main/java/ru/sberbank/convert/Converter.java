@@ -53,6 +53,10 @@ public class Converter {
     }
 
     private void checkParam(ConvertParams params) throws RuntimeException {
+        if (params == null) {
+            throw new RuntimeException("Params is null");
+        }
+
         List<CheckResult> checkResults = new CheckParams(params).getResult();
         Optional<String> errorMessage = checkResults
                 .stream()
@@ -63,5 +67,9 @@ public class Converter {
         if (errorMessage.isPresent()) {
             throw new RuntimeException(errorMessage.get());
         }
+    }
+
+    public List<IConvertItem> getConverters() {
+        return converters;
     }
 }
