@@ -1,6 +1,5 @@
 package ru.sberbank.check;
 
-import org.jetbrains.annotations.NotNull;
 import ru.sberbank.params.ConvertParams;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class CheckParams {
         this.checks = this.initCheck();
     }
 
-    private @NotNull List<ICheckItem> initCheck() {
+    private List<ICheckItem> initCheck() {
         ArrayList<ICheckItem> checks = new ArrayList<>();
         checks.add(new CheckSourceFileExist(params));
         return checks;
