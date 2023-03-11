@@ -23,7 +23,7 @@ public class PdfA1aConverter {
                 .makeDocument()
                 .stream()
                 .filter(status -> status.getCode() == ConversionStatusCode.ERROR)
-                .reduce((p, item) -> ConversionStatus.ErrorStatus(p + item.getMessage()));
+                .reduce((prev, item) -> ConversionStatus.ErrorStatus(prev.getMessage() + System.lineSeparator() + item.getMessage()));
 
         return conversionStatus.orElseGet(ConversionStatus::SuccessStatus);
     }

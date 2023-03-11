@@ -1,8 +1,6 @@
 package ru.sberbank.convert;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
-import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.*;
 import ru.sberbank.check.CheckParams;
 import ru.sberbank.check.CheckResult;
 import ru.sberbank.check.CheckResultCode;
@@ -60,7 +58,7 @@ public class Converter {
                 .stream()
                 .filter(it -> it.getCode() == CheckResultCode.ERROR)
                 .map(CheckResult::getMessage)
-                .reduce((p, i) -> p + i + "\n");
+                .reduce((prev, item) -> prev + System.lineSeparator() + item);
 
         if (errorMessage.isPresent()) {
             throw new RuntimeException(errorMessage.get());
