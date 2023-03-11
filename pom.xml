@@ -76,10 +76,10 @@
     </dependencies>
 
     <build>
-        <!-- Сборка JAR файла -->
         <finalName>cv</finalName>
 
         <plugins>
+            <!-- Сборка JAR файла -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -105,6 +105,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Тестирование -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.6.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <!-- Отчет о покрытии тестами -->

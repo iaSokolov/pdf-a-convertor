@@ -2,25 +2,35 @@ package ru.sberbank.check;
 
 import ru.sberbank.params.ConvertParams;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class CheckSourceFileExist implements ICheckItem {
-    private CheckResult result;
+    private List<CheckResult> result;
 
     private final ConvertParams params;
-
 
     public CheckSourceFileExist(ConvertParams params) {
         this.params = params;
     }
 
     @Override
-    public CheckResult getResult() {
+    public List<CheckResult> getResult() {
         if (this.result == null) {
-            this.result = this.check(this.params);
+            this.result = new ArrayList<>();
+            this.result.add(this.checkFile(this.params.getSourceFilePath()));
         }
         return this.result;
     }
 
-    private CheckResult check(ConvertParams params) {
-        return CheckResult.Success();
+    private CheckResult checkFile(String path) {
+        File file = new File(path);
+
+        if (file.exists() && !file.isDirectory()) {
+            return CheckResult.Success();
+        } else {
+            return CheckResult.Error(String.join(" ", "File", path, "was not found"));
+        }
     }
 }

@@ -1,5 +1,7 @@
 package ru.sberbank.check;
 
+import java.util.List;
+
 public interface ICheckItem {
-    CheckResult getResult();
+    List<CheckResult> getResult();
 }

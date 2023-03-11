@@ -10,8 +10,8 @@ public class ConvertParams {
         } else if (args.length != 2) {
             throw new IllegalArgumentException("The program was called with incorrect parameters");
         }
-        this.targetFilePath = args[1];
         this.sourceFilePath = args[0];
+        this.targetFilePath = args[1];
     }
 
     public String getSourceFilePath() {
