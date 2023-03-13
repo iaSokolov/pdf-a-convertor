@@ -24,8 +24,13 @@ public class Converter {
     private List<IConvertItem> initConverters() {
         ArrayList<IConvertItem> list = new ArrayList<>();
 
-        list.add(new DecoderConvertor());
-        list.add(new OCGConvertor());
+        if (this.params.getConverters().stream().anyMatch(it -> it.equals(IConvertItem.DecoderConvertorParamCode))) {
+            list.add(new DecoderConvertor());
+        }
+
+        if (this.params.getConverters().stream().anyMatch(it -> it.equals(IConvertItem.OCGConvertorParamCode))) {
+            list.add(new OCGConvertor());
+        }
 
         return list;
     }

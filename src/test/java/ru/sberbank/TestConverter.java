@@ -71,6 +71,36 @@ public class TestConverter {
     }
 
     @Test
+    @DisplayName("Test decoder convertor in param")
+    public void decoderConvertorParamTest() {
+        String source = SOURCE_DIR + "pdf-standard.pdf";
+        String target = "";
+        String addParam = "-cDecoder";
+
+        ConvertParams convertParams = new ConvertParams(new String[]{source, target, addParam});
+        Converter converter = new Converter(convertParams);
+
+        Assertions.assertNotNull(converter.getConverters());
+        Assertions.assertEquals(1, converter.getConverters().size());
+        Assertions.assertInstanceOf(DecoderConvertor.class, converter.getConverters().get(0));
+    }
+
+    @Test
+    @DisplayName("Test OCG convertor in param")
+    public void OCGConvertorParamTest() {
+        String source = SOURCE_DIR + "pdf-standard.pdf";
+        String target = "";
+        String addParam = "-cOCG";
+
+        ConvertParams convertParams = new ConvertParams(new String[]{source, target, addParam});
+        Converter converter = new Converter(convertParams);
+
+        Assertions.assertNotNull(converter.getConverters());
+        Assertions.assertEquals(1, converter.getConverters().size());
+        Assertions.assertInstanceOf(OCGConvertor.class, converter.getConverters().get(0));
+    }
+
+    @Test
     @DisplayName("Test count converters")
     public void countConvertersTest() {
         String source = SOURCE_DIR + "pdf-standard.pdf";
