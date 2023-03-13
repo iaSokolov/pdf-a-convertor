@@ -46,7 +46,8 @@ public class Converter {
             document.close();
         } catch (Exception error) {
             result = new ArrayList<>();
-            result.add(ConversionStatus.ErrorStatus(error.getMessage()));
+            String message = error.getMessage();
+            result.add(ConversionStatus.ErrorStatus(message));
         }
 
         return result;

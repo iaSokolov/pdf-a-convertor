@@ -1,11 +1,14 @@
 package ru.sberbank;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import ru.sberbank.check.CheckResult;
 import ru.sberbank.check.CheckSourceFileExist;
 import ru.sberbank.convert.*;
+import ru.sberbank.decoder.StreamDecoder;
 import ru.sberbank.params.ConvertParams;
 
 import java.io.File;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 public class TestConverter {
@@ -176,6 +180,32 @@ public class TestConverter {
 
             RuntimeException error = assertThrows(RuntimeException.class, () -> new Converter(convertParams));
             Assertions.assertEquals("error line 1\nerror line 2", error.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Test throw conversion")
+    public void throwConversionTest() throws IOException {
+        String source = SOURCE_DIR + "pdfA-1.pdf";
+        String target = RESULT_DIR + "pdfA-1-error-throw-result.pdf";
+
+        try (MockedConstruction<DecoderConvertor> mock = Mockito.mockConstruction(DecoderConvertor.class, (decoder, context) -> {
+            when(decoder.changeDocument(any())).thenThrow(new RuntimeException("error"));
+        })) {
+            Assertions.assertFalse(new File(target).exists());
+
+            ConvertParams convertParams = new ConvertParams(new String[]{source, target});
+            Converter converter = new Converter(convertParams);
+
+            List<ConversionStatus> conversionStatuses = converter.makeDocument();
+            List<ConversionStatus> errorList = conversionStatuses
+                    .stream()
+                    .filter(it -> it.getCode() == ConversionStatusCode.ERROR)
+                    .filter(it -> it.getMessage().equals("error"))
+                    .collect(Collectors.toList());
+
+            Assertions.assertNotNull(errorList);
+            Assertions.assertEquals(1, errorList.size());
         }
     }
 }
